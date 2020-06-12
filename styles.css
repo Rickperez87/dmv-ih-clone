@@ -7,6 +7,7 @@ body {
   font-family: "Poppins", sans-serif;
   background-color: #eaeaee;
   color: black;
+  overflow: hidden;
 }
 h1 {
   font-weight: 500;
@@ -48,22 +49,37 @@ nav {
   padding: 20px 50px;
 }
 .logo {
+  margin: auto 0px;
   font-weight: 300;
   font-size: 2.5rem;
+  white-space: nowrap;
 }
 .links-list {
   display: flex;
   justify-content: center;
   align-items: center;
   list-style: none;
+  white-space: nowrap;
 }
 li {
   margin: 15px;
+  cursor: pointer;
+  padding: 5px 10px;
 }
+
+.links-list > li:hover {
+  font-weight: 500;
+  font-size: 1em;
+  background: #eaeaee5e;
+  border-radius: 4px;
+  box-shadow: 0px 10px 6px -6px #0f212c5b;
+}
+
 /* large immage banner */
 .showcase {
   background: url("https://images.squarespace-cdn.com/content/v1/5e4bffac94c2c44a9438d3ab/1586532200186-YTC33MBPNIORQA173SOA/ke17ZwdGBToddI8pDm48kPTrHXgsMrSIMwe6YW3w1AZ7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0k5fwC0WRNFJBIXiBeNI5fKTrY37saURwPBw8fO2esROAxn-RKSrlQamlL27g22X2A/ih-winter-retreat-68.jpg?format=2500w");
-  height: 480px;
+  width: 100%;
+  padding: calc(30em * (1 / 2));
   overflow: hidden;
   display: relative;
   background-position: 20% 60%;
@@ -76,7 +92,7 @@ li {
   align-items: center;
   justify-content: center;
   max-width: 1700px;
-  margin: 0 auto;
+  margin: 50px auto;
 }
 
 .img-wrap {
@@ -98,6 +114,7 @@ li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 50px;
 }
 .boxes-wrap {
   padding: 20px 40px;
@@ -131,4 +148,75 @@ li {
 }
 .join-btn {
   width: 200px;
+}
+/* instagram section  */
+.instagram {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 300px 0px;
+}
+.ig-boxes {
+  padding: 20px 40px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: 2rem;
+  grid-row-gap: 2rem;
+  max-width: 1700px;
+}
+.ig-box {
+  background: black;
+  width: 100%;
+}
+/* footer section */
+footer {
+  display: flex;
+  height: 150px;
+  justify-content: space-between;
+  padding: 50px;
+  background: #1470af;
+  color: white;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  list-style: none;
+}
+.footer-links > li {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  padding: 0px 20px;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+
+.footer-links > li:hover {
+  background: white;
+  color: #1470af;
+  font-weight: bold;
+}
+/* media queries */
+@media (max-width: 1100px) {
+  nav > .links-list {
+    display: none;
+  }
+  .learn-more {
+    flex-direction: column;
+  }
+  .boxes-content-wrap,
+  .boxes-wrap {
+    grid-template-columns: 1fr;
+  }
+  .ig-boxes {
+    grid-template-columns: repeat(2, 1fr);
+    width: 90%;
+    margin: 1em;
+  }
+  .instagram .ig-box > img {
+    width: 100%;
+  }
 }

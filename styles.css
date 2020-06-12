@@ -1,0 +1,134 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #eaeaee;
+  color: black;
+}
+h1 {
+  font-weight: 500;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+p {
+  line-height: 1.8em;
+  font-weight: 100;
+  font-size: 1em;
+  margin: 20px 0px;
+}
+/*Global Button Style*/
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 60px;
+  padding: 10px 20px;
+  background: #eaeaee;
+  text-decoration: none;
+  text-align: center;
+  border: 2px solid #1470af;
+  border-radius: 5px;
+  color: #1470af;
+}
+.btn:hover {
+  background: #1470af;
+  color: #eaeaee;
+}
+/*nav*/
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 120px;
+  padding: 20px 50px;
+}
+.logo {
+  font-weight: 300;
+  font-size: 2.5rem;
+}
+.links-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+}
+li {
+  margin: 15px;
+}
+/* large immage banner */
+.showcase {
+  background: url("https://images.squarespace-cdn.com/content/v1/5e4bffac94c2c44a9438d3ab/1586532200186-YTC33MBPNIORQA173SOA/ke17ZwdGBToddI8pDm48kPTrHXgsMrSIMwe6YW3w1AZ7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0k5fwC0WRNFJBIXiBeNI5fKTrY37saURwPBw8fO2esROAxn-RKSrlQamlL27g22X2A/ih-winter-retreat-68.jpg?format=2500w");
+  height: 480px;
+  overflow: hidden;
+  display: relative;
+  background-position: 20% 60%;
+  background-size: 100%;
+}
+/* learn more section */
+.learn-more {
+  padding: 100px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1700px;
+  margin: 0 auto;
+}
+
+.img-wrap {
+  flex: 3;
+  width: 100%;
+  height: cover;
+  margin-right: 2rem;
+}
+.content-wrap {
+  flex: 5;
+}
+.content-wrap > .btn {
+  position: relative;
+  margin: 3em auto;
+}
+/* upcoming events */
+.events {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.boxes-wrap {
+  padding: 20px 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 2rem;
+  max-width: 1700px;
+}
+.box-wrap > img {
+  width: 100%;
+  margin: 0 20px;
+}
+.boxes-content-wrap {
+  padding: 0px 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 2rem;
+  justify-items: center;
+  width: 100%;
+  max-width: 1700px;
+}
+.box-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0rem 2rem;
+}
+.box-content > p {
+  margin-top: 0px;
+}
+.join-btn {
+  width: 200px;
+}

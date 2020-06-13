@@ -7,18 +7,18 @@ body {
   font-family: "Poppins", sans-serif;
   background-color: #eaeaee;
   color: black;
-  overflow: hidden;
 }
 h1 {
   font-weight: 500;
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
+  font-size: 2.5em;
+  margin: 2em 0px;
+  white-space: nowrap;
 }
 p {
   line-height: 1.8em;
   font-weight: 100;
   font-size: 1em;
-  margin: 20px 0px;
+  margin: 1.2em 0px;
 }
 /*Global Button Style*/
 .btn {
@@ -34,6 +34,7 @@ p {
   border: 2px solid #1470af;
   border-radius: 5px;
   color: #1470af;
+  white-space: nowrap;
 }
 .btn:hover {
   background: #1470af;
@@ -42,27 +43,29 @@ p {
 /*nav*/
 nav {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 120px;
-  padding: 20px 50px;
+  padding: 20px 40px;
 }
-.logo {
-  margin: auto 0px;
+nav > .logo {
+  position: absolute;
+  margin: auto;
   font-weight: 300;
-  font-size: 2.5rem;
+  font-size: 2.5em;
   white-space: nowrap;
 }
 .links-list {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   list-style: none;
   white-space: nowrap;
+  width: 100%;
+  margin-right: 3em;
 }
 li {
-  margin: 15px;
+  margin: 0.5em;
   cursor: pointer;
   padding: 5px 10px;
 }
@@ -74,16 +77,129 @@ li {
   border-radius: 4px;
   box-shadow: 0px 10px 6px -6px #0f212c5b;
 }
+/* burger styling in nav bar  */
+.menu-wrap {
+  position: relative;
+  top: 0px;
+  left: 95%;
+  background: #eaeaeea2;
+  width: 50px;
+  height: 50px;
+  display: none;
+}
+.toggler {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  opacity: 0;
+  z-index: 2;
+}
+.burger {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  align-items: center;
+  z-index: 1;
+  transition: all 1s ease;
+}
+.burger > div {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: black;
+  transition: all 0.3s ease;
+}
+.burger > div::before,
+.burger > div::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  width: 100%;
+  height: 2px;
+  background: black;
+}
+.burger > div::after {
+  top: 10px;
+}
+/* transform menu icon  */
+.toggler:checked + .burger > div {
+  transform: rotate(135deg);
+}
 
+.toggler:checked + .burger > div:before,
+.toggler:checked + .burger > div:after {
+  top: 0px;
+  transform: rotate(90deg);
+}
+.toggler:checked ~ .menu-bar {
+  display: block;
+}
+
+/* menu view for small screen when toggled */
+.menu-bar {
+  position: absolute;
+  top: 85px;
+  right: -40px;
+  z-index: 25;
+  background: #eaeaeeef;
+  color: black;
+  height: 100vh;
+  width: 100vw;
+  display: none;
+}
+.links-menu {
+  width: 50%;
+  list-style: none;
+  font-size: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px auto;
+  white-space: nowrap;
+}
+.links-menu > li:hover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: #1471af38;
+  color: white;
+}
+.btn-menu {
+  margin: 8em auto;
+}
 /* large immage banner */
 .showcase {
   background: url("https://images.squarespace-cdn.com/content/v1/5e4bffac94c2c44a9438d3ab/1586532200186-YTC33MBPNIORQA173SOA/ke17ZwdGBToddI8pDm48kPTrHXgsMrSIMwe6YW3w1AZ7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0k5fwC0WRNFJBIXiBeNI5fKTrY37saURwPBw8fO2esROAxn-RKSrlQamlL27g22X2A/ih-winter-retreat-68.jpg?format=2500w");
+  background-repeat: no-repeat;
   width: 100%;
   padding: calc(30em * (1 / 2));
   overflow: hidden;
-  display: relative;
   background-position: 20% 60%;
   background-size: 100%;
+  z-index: -1;
+  position: relative;
+}
+.showcase > .overlay {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  padding: calc(30em * (1 / 2));
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.171);
+  z-index: 15;
+  color: white;
+}
+.overlay > h1 {
+  margin: -4em 0 0 -2em;
 }
 /* learn more section */
 .learn-more {
@@ -92,14 +208,15 @@ li {
   align-items: center;
   justify-content: center;
   max-width: 1700px;
-  margin: 50px auto;
+  margin: 4em auto;
+  overflow: hidden;
 }
 
 .img-wrap {
   flex: 3;
   width: 100%;
   height: cover;
-  margin-right: 2rem;
+  margin-right: 2em;
 }
 .content-wrap {
   flex: 5;
@@ -170,14 +287,17 @@ li {
   width: 100%;
 }
 /* footer section */
+
 footer {
-  display: flex;
   height: 150px;
+  display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 50px;
   background: #1470af;
   color: white;
 }
+
 .footer-links {
   display: flex;
   justify-content: center;
@@ -192,6 +312,7 @@ footer {
   padding: 0px 20px;
   transition: all 0.5s ease;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .footer-links > li:hover {
@@ -201,15 +322,49 @@ footer {
 }
 /* media queries */
 @media (max-width: 1100px) {
-  nav > .links-list {
+  body {
+    font-size: 0.8em;
+  }
+  nav > .links-list,
+  .btn-nav {
     display: none;
   }
-  .learn-more {
-    flex-direction: column;
+  .overlay > h1 {
+    margin: -2em 0 0 -6em;
+    font-size: x-large;
   }
+
+  .learn-more {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    padding: 0;
+  }
+  .img-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .img-wrap img {
+    width: 80%;
+    height: 80%;
+  }
+  .content-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    margin: 1em;
+  }
+
   .boxes-content-wrap,
   .boxes-wrap {
     grid-template-columns: 1fr;
+    align-content: center;
+    justify-items: center;
+    width: 90%;
   }
   .ig-boxes {
     grid-template-columns: repeat(2, 1fr);
@@ -218,5 +373,8 @@ footer {
   }
   .instagram .ig-box > img {
     width: 100%;
+  }
+  .menu-wrap {
+    display: inline-block;
   }
 }

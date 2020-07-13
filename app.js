@@ -1,7 +1,8 @@
 let contactForm = document.querySelector(".contactForm"),
   modal = document.querySelector(".modal-container"),
-  closeBtn = document.querySelector(".close-btn");
-contactBtn = document.querySelector(".btn.btn-nav");
+  closeBtn = document.querySelector(".close-btn"),
+  contactBtn = document.querySelector(".btn.btn-nav"),
+  nav = document.querySelector("nav");
 
 // function displays contact form Modal
 let showContactForm = () => {
@@ -22,4 +23,4 @@ closeBtn.addEventListener("click", () => {
 modal.addEventListener("click", () => {
   closeContactForm();
 });
-// toggle modal class
+// event listner scroll nav bar effect

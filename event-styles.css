@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #f4f4f4;
+}
+table {
+  height: 40rem;
+  width: 100%;
+  display: table;
+  border-color: grey;
+  border-spacing: 4px;
+  margin: 0px auto;
+  border-collapse: separate;
+  table-layout: fixed;
+}
+
+tbody {
+  background: rgb(235, 234, 234);
+}
+tr {
+  height: 2rem;
+}
+thead,
+tfoot {
+  text-align: center;
+  background-color: #f4f4f4;
+  color: #000;
+}
+.calendar-grid {
+  border-collapse: separate;
+  border-spacing: 4px;
+  table-layout: fixed;
+}
+.container {
+  padding: 5rem 10rem;
+  display: flex;
+  align-items: center;
+}

@@ -36,17 +36,37 @@ class Month {
   daysOfMonth() {
     return this.d.getDate();
   }
-  numberOfDays() {
-    let arr = [];
+
+  calendar() {
+    let arr = [],
+      blank = [],
+      dates = [],
+      firstDay = this.d.getDay();
     for (let i = 1; i <= this.lastDay; i++) {
       arr.push(i);
     }
-    return arr;
+    for (let i = 1; i <= firstDay; i++) {
+      blank.push("");
+    }
+    dates = blank.concat(arr);
+    let allDates = dates.map((date) => `<td>${date}</td>`);
+
+    allDates.splice(0, 0, `</tr>`);
+    allDates.splice(8, 0, `</tr><tr>`);
+    allDates.splice(16, 0, `</tr><tr>`);
+    allDates.splice(24, 0, `</tr><tr>`);
+    allDates.splice(32, 0, `</tr><tr>`);
+    allDates.splice(42, 0, `</tr>`);
+    return allDates.join("");
+    // need to add tr tags to every 7th td and then can inner HTML tbody.
   }
 }
 const jan = new Month(2020, 1);
 x = jan.firstDay();
 firstDay = document.querySelector(`tbody>tr>td:nth-child(${x})`);
+let tbody = document.querySelector("tbody");
 firstDay.innerHTML = jan.daysOfMonth();
-console.log(jan.numberOfDays());
-// add dates for all the rest of the month html element
+tbody.innerHTML = jan.calendar();
+
+// create array of calendar dates with html markups
+let f = new Date(2020, 0, 31);

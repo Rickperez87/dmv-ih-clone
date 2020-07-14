@@ -1,19 +1,7 @@
 class Month {
   constructor(year, month) {
     let days, months, d, lastDay, dates;
-    this.year = year;
-    this.month = month;
-    this.d = new Date(this.year, this.month - 1, 1);
-    this.days = days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    this.months = months = [
+    months = [
       "January",
       "February",
       "March",
@@ -27,7 +15,21 @@ class Month {
       "November",
       "December",
     ];
-    this.lastDay = 31;
+    this.yr = year;
+    this.m = month;
+    this.d = new Date(this.yr, this.m, 1);
+    this.month = months[this.d.getMonth()];
+    // this.days = days = [
+    //   "Sunday",
+    //   "Monday",
+    //   "Tuesday",
+    //   "Wednesday",
+    //   "Thursday",
+    //   "Friday",
+    //   "Saturday",
+    // ];
+
+    this.lastDay = new Date(this.yr, this.m + 1, 0).getDate();
   }
   //   retrieve first day of the month and display date on calendar HTML element
   firstDay() {
@@ -60,13 +62,51 @@ class Month {
     return allDates.join("");
     // need to add tr tags to every 7th td and then can inner HTML tbody.
   }
+  static fullYear(year) {
+    let fullyear = [],
+      months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+    months.map((month, index) => {
+      month = new Month(year, index);
+      fullyear.push(month);
+    });
+    return fullyear;
+  }
 }
-const jan = new Month(2020, 1);
-x = jan.firstDay();
-firstDay = document.querySelector(`tbody>tr>td:nth-child(${x})`);
-let tbody = document.querySelector("tbody");
-firstDay.innerHTML = jan.daysOfMonth();
-tbody.innerHTML = jan.calendar();
-
 // create array of calendar dates with html markups
-let f = new Date(2020, 0, 31);
+function displayMonth(year, month) {
+  const MonthsObj = Month.fullYear(year),
+    months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+  console.log(MonthsObj);
+  x = MonthsObj[months.indexOf(month)].firstDay();
+  firstDay = document.querySelector(`tbody>tr>td:nth-child(${x})`);
+  let tbody = document.querySelector("tbody");
+  firstDay.innerHTML = MonthsObj[months.indexOf(month)].daysOfMonth();
+  tbody.innerHTML = MonthsObj[months.indexOf(month)].calendar();
+}
+displayMonth(2020, "July");

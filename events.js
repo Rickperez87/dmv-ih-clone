@@ -1,57 +1,72 @@
 class Month {
+  months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   constructor(year, month) {
-    let days, months, d, lastDay, dates;
-    months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
     this.yr = year;
     this.m = month;
-    this.d = new Date(this.yr, this.m, 1);
-    this.month = months[this.d.getMonth()];
-    // this.days = days = [
-    //   "Sunday",
-    //   "Monday",
-    //   "Tuesday",
-    //   "Wednesday",
-    //   "Thursday",
-    //   "Friday",
-    //   "Saturday",
-    // ];
-
-    this.lastDay = new Date(this.yr, this.m + 1, 0).getDate();
   }
   //   retrieve first day of the month and display date on calendar HTML element
-  firstDay() {
-    return this.d.getDay() + 1;
+  getFirstDay() {
+    let firstDateDayOfWkIndex = new Date(this.yr, this.m, 1).getDay();
+    return firstDateDayOfWkIndex;
   }
-  daysOfMonth() {
-    return this.d.getDate();
+  getLastDay() {
+    let lastDate = new Date(this.yr, this.m + 1, 0).getDate();
+    return lastDate;
+  }
+  getMonth() {
+    let monthIndex = new Date(this.yr, this.m, 1).getMonth();
+    return this.months[monthIndex];
   }
 
   calendar() {
     let arr = [],
-      blank = [],
-      dates = [],
-      firstDay = this.d.getDay();
-    for (let i = 1; i <= this.lastDay; i++) {
+      firstWeekBlanks = [],
+      LastWeekBlanks = [],
+      dates = [];
+    for (let i = 1; i <= this.getLastDay(); i++) {
       arr.push(i);
     }
-    for (let i = 1; i <= firstDay; i++) {
-      blank.push("");
+    for (let i = 1; i <= this.getFirstDay(); i++) {
+      firstWeekBlanks.push("");
     }
-    dates = blank.concat(arr);
+    dates = firstWeekBlanks.concat(arr);
+
+    // add blanks to last row to make full row
+    if (dates.length < 35) {
+      for (let i = dates.length; i < 35; i++) {
+        LastWeekBlanks.push("");
+      }
+      dates = dates.concat(LastWeekBlanks);
+    }
+
+    if (dates.length - 1 >= 35) {
+      let allDates = dates.map((date) => `<td>${date}</td>`);
+      // need to add tr tags fore each row of calendar
+
+      allDates.splice(0, 0, `</tr>`);
+      allDates.splice(8, 0, `</tr><tr>`);
+      allDates.splice(16, 0, `</tr><tr>`);
+      allDates.splice(24, 0, `</tr><tr>`);
+      allDates.splice(32, 0, `</tr><tr>`);
+      allDates.splice(40, 0, `</tr><tr>`);
+      allDates.splice(48, 0, `</tr>`);
+      return allDates.join("");
+    }
     let allDates = dates.map((date) => `<td>${date}</td>`);
+    // need to add tr tags fore each row of calendar
 
     allDates.splice(0, 0, `</tr>`);
     allDates.splice(8, 0, `</tr><tr>`);
@@ -60,24 +75,10 @@ class Month {
     allDates.splice(32, 0, `</tr><tr>`);
     allDates.splice(42, 0, `</tr>`);
     return allDates.join("");
-    // need to add tr tags to every 7th td and then can inner HTML tbody.
   }
+
   static fullYear(year) {
-    let fullyear = [],
-      months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
+    let fullyear = [];
     months.map((month, index) => {
       month = new Month(year, index);
       fullyear.push(month);
@@ -87,8 +88,32 @@ class Month {
 }
 // create array of calendar dates with html markups
 function displayMonth(year, month) {
-  const MonthsObj = Month.fullYear(year),
-    months = [
+  const MonthsObj = Month.fullYear(year);
+  months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  let x = MonthsObj[months.indexOf(month)].getFirstDay(),
+    firstDay = document.querySelector(`tbody>tr>td:nth-child(${x})`),
+    tbody = document.querySelector("tbody");
+  firstDay.innerHTML = MonthsObj[months.indexOf(month)].getMonth();
+  tbody.innerHTML = MonthsObj[months.indexOf(month)].calendar();
+}
+(function setMonth() {
+  // display month on UI of calendar
+  let month = new Date().getMonth();
+  (monthUI = document.getElementById("month")),
+    (months = [
       "January",
       "February",
       "March",
@@ -101,12 +126,41 @@ function displayMonth(year, month) {
       "October",
       "November",
       "December",
-    ];
-  console.log(MonthsObj);
-  x = MonthsObj[months.indexOf(month)].firstDay();
-  firstDay = document.querySelector(`tbody>tr>td:nth-child(${x})`);
-  let tbody = document.querySelector("tbody");
-  firstDay.innerHTML = MonthsObj[months.indexOf(month)].daysOfMonth();
-  tbody.innerHTML = MonthsObj[months.indexOf(month)].calendar();
-}
-displayMonth(2020, "July");
+    ]),
+    (current = months[month]);
+
+  monthUI.innerHTML = `${current}`;
+
+  displayMonth(2020, `${current}`);
+  // click event to control current
+  let left = document.getElementById("left"),
+    right = document.getElementById("right");
+  left.addEventListener("click", () => {
+    updateLeft();
+  });
+  right.addEventListener("click", () => {
+    updateRight();
+  });
+  function updateLeft() {
+    if (month < 1) {
+      month = 11;
+      current = this.months[month];
+      monthUI.innerHTML = `${current}`;
+      displayMonth(2020, `${current}`);
+    } else month--;
+    current = this.months[month];
+    monthUI.innerHTML = `${current}`;
+    displayMonth(2020, `${current}`);
+  }
+  function updateRight() {
+    if (month > this.months.length - 2) {
+      month = 0;
+      current = this.months[month];
+      monthUI.innerHTML = `${current}`;
+      displayMonth(2020, `${current}`);
+    } else month++;
+    current = this.months[month];
+    monthUI.innerHTML = `${current}`;
+    displayMonth(2020, `${current}`);
+  }
+})();

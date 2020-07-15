@@ -23,6 +23,9 @@ tbody {
 tr {
   height: 2rem;
 }
+td {
+  text-align: right;
+}
 thead,
 tfoot {
   text-align: center;
@@ -37,5 +40,12 @@ tfoot {
 .container {
   padding: 5rem 10rem;
   display: flex;
+  flex-direction: column;
+}
+.month-header {
+  width: 100%;
+  padding: 0 30px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }

@@ -6,8 +6,41 @@
 body {
   background: #f4f4f4;
 }
+h1 {
+  font-weight: 300;
+}
+.container {
+  padding: 5rem 10rem;
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  width: 60vw;
+  margin: 0 auto;
+}
+.month-header {
+  width: 100%;
+  padding: 0 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+#month {
+  margin-right: 10px;
+}
+#UI {
+  display: flex;
+}
+.calendar-grid {
+  border-collapse: separate;
+  border-spacing: 4px;
+  table-layout: fixed;
+  height: 100%;
+  width: 100%;
+}
+
 table {
-  height: 40rem;
+  height: 100%;
   width: 100%;
   display: table;
   border-color: grey;
@@ -17,35 +50,18 @@ table {
   table-layout: fixed;
 }
 
-tbody {
-  background: rgb(235, 234, 234);
-}
-tr {
-  height: 2rem;
-}
-td {
-  text-align: right;
-}
-thead,
-tfoot {
+.header > td {
   text-align: center;
   background-color: #f4f4f4;
   color: #000;
 }
-.calendar-grid {
-  border-collapse: separate;
-  border-spacing: 4px;
-  table-layout: fixed;
+
+tbody {
+  background: rgb(235, 234, 234);
 }
-.container {
-  padding: 5rem 10rem;
-  display: flex;
-  flex-direction: column;
-}
-.month-header {
-  width: 100%;
-  padding: 0 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+
+tbody > tr > td {
+  text-align: right;
+  vertical-align: top;
+  padding: 5px;
 }

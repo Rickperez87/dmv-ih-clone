@@ -1,5 +1,5 @@
 class Month {
-  months = [
+  static months = [
     "January",
     "February",
     "March",
@@ -28,9 +28,8 @@ class Month {
   }
   getMonth() {
     let monthIndex = new Date(this.yr, this.m, 1).getMonth();
-    return this.months[monthIndex];
+    return months[monthIndex];
   }
-
   calendar() {
     let arr = [],
       firstWeekBlanks = [],
@@ -45,9 +44,11 @@ class Month {
     dates = firstWeekBlanks.concat(arr);
 
     // add blanks to last row to make full row
-    if (dates.length < 35) {
-      for (let i = dates.length; i < 35; i++) {
+    if (dates.length % 7 !== 0) {
+      let i = dates.length;
+      while (i % 7 !== 0) {
         LastWeekBlanks.push("");
+        i++;
       }
       dates = dates.concat(LastWeekBlanks);
     }
@@ -79,7 +80,7 @@ class Month {
 
   static fullYear(year) {
     let fullyear = [];
-    months.map((month, index) => {
+    this.months.map((month, index) => {
       month = new Month(year, index);
       fullyear.push(month);
     });
@@ -104,16 +105,17 @@ function displayMonth(year, month) {
     "December",
   ];
   let x = MonthsObj[months.indexOf(month)].getFirstDay(),
-    firstDay = document.querySelector(`tbody>tr>td:nth-child(${x})`),
+    firstDay = document.querySelector(`tbody>tr>td:nth-child(${x + 1})`),
     tbody = document.querySelector("tbody");
   firstDay.innerHTML = MonthsObj[months.indexOf(month)].getMonth();
   tbody.innerHTML = MonthsObj[months.indexOf(month)].calendar();
 }
 (function setMonth() {
   // display month on UI of calendar
-  let month = new Date().getMonth();
-  (monthUI = document.getElementById("month")),
-    (months = [
+  let monthIndex = new Date().getMonth(),
+    monthUI = document.getElementById("month"),
+    yearUI = document.getElementById("year"),
+    months = [
       "January",
       "February",
       "March",
@@ -126,11 +128,12 @@ function displayMonth(year, month) {
       "October",
       "November",
       "December",
-    ]),
-    (current = months[month]);
+    ],
+    current = months[monthIndex];
+  currentYear = 2020;
 
   monthUI.innerHTML = `${current}`;
-
+  yearUI.innerHTML = `${currentYear}`;
   displayMonth(2020, `${current}`);
   // click event to control current
   let left = document.getElementById("left"),
@@ -142,25 +145,35 @@ function displayMonth(year, month) {
     updateRight();
   });
   function updateLeft() {
-    if (month < 1) {
-      month = 11;
-      current = this.months[month];
+    if (monthIndex === 0) {
+      monthIndex = 11;
+      current = this.months[monthIndex];
+      currentYear--;
       monthUI.innerHTML = `${current}`;
-      displayMonth(2020, `${current}`);
-    } else month--;
-    current = this.months[month];
+      yearUI.innerHTML = `${currentYear}`;
+      displayMonth(`${currentYear}`, `${current}`);
+    } else monthIndex--;
+    current = this.months[monthIndex];
     monthUI.innerHTML = `${current}`;
     displayMonth(2020, `${current}`);
   }
   function updateRight() {
-    if (month > this.months.length - 2) {
-      month = 0;
-      current = this.months[month];
+    if (monthIndex === 11) {
+      monthIndex = 0;
+      current = this.months[monthIndex];
+      currentYear++;
       monthUI.innerHTML = `${current}`;
-      displayMonth(2020, `${current}`);
-    } else month++;
-    current = this.months[month];
+      yearUI.innerHTML = `${currentYear}`;
+      displayMonth(`${currentYear}`, `${current}`);
+    } else monthIndex++;
+    current = this.months[monthIndex];
     monthUI.innerHTML = `${current}`;
-    displayMonth(2020, `${current}`);
+    displayMonth(`${currentYear}`, `${current}`);
   }
+  (function backgroundImage() {
+    let item = document.querySelector(`tbody>tr>td:nth-child(${5})`);
+    item.style =
+      "background:url('https://picsum.photos/2000') no-repeat center center/cover";
+    console.log("executed");
+  })();
 })();

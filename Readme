@@ -3,3 +3,6 @@ some transforms, translates, media queries, and navbar
 collapse.
 
 7/10/20 - moving on to vanilla js. Add modal functionality with contact form using js from scratch.
+
+Added an events HTML, Css and JS. The JS I wrote creates a calendar on the web page that updates the 
+Month year and the dates as you select month with arrow key.

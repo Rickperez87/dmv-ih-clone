@@ -170,10 +170,33 @@ function displayMonth(year, month) {
     monthUI.innerHTML = `${current}`;
     displayMonth(`${currentYear}`, `${current}`);
   }
-  (function backgroundImage() {
-    let item = document.querySelector(`tbody>tr>td:nth-child(${5})`);
-    item.style =
-      "background:url('https://picsum.photos/2000') no-repeat center center/cover";
-    console.log("executed");
-  })();
 })();
+
+// add event to calander
+let eventDate = document.getElementById("eventDate"),
+  eventUrl = document.getElementById("eventUrl"),
+  submit = document
+    .getElementById("eventSubmit")
+    .addEventListener("click", (e) => {
+      e.preventDefault();
+      backgroundImage(eventUrl.value, eventDate.value);
+      console.log("works", eventUrl.value);
+    });
+
+function backgroundImage(eventUrl, date) {
+  let month, year, day, calendarELements;
+  month = date[0] + date[1] - 1;
+  day = date[3] + date[4];
+  year = date.slice(6);
+  let d = new Date(year, month, 1),
+    firstDay = d.getDay();
+  calendarELements = firstDay + Number(day);
+  console.log(calendarELements);
+
+  let item = document.querySelector(
+    `tbody>tr:nth-child(${calendarELements / 7}) >td:nth-child(${
+      (calendarELements % 7) + 7
+    })`
+  );
+  item.style = `background:url(${eventUrl}) no-repeat center center/cover`;
+}

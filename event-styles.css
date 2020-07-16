@@ -9,7 +9,8 @@ body {
 h1 {
   font-weight: 300;
 }
-.container {
+.container,
+.addEvent-wrap {
   padding: 5rem 10rem;
   display: flex;
   flex-direction: column;
@@ -64,4 +65,20 @@ tbody > tr > td {
   text-align: right;
   vertical-align: top;
   padding: 5px;
+}
+/* Event Submission style */
+.addEvent {
+  margin: 0 auto;
+}
+.addEvent > [type="text"] {
+  padding: 0.3rem;
+}
+.btn {
+  padding: 8px 10px;
+  background: coral;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }

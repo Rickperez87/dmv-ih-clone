@@ -1,44 +1,36 @@
-class Month {
-  static months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  constructor(year, month) {
-    this.yr = year;
-    this.m = month;
+class Calendar {
+  constructor() {
+    this.months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    let d = new Date();
+    this.currYear = d.getFullYear();
+    this.currMonth = d.getMonth();
+    this.currDay = d.getDate();
   }
-  //   retrieve first day of the month and display date on calendar HTML element
-  getFirstDay() {
-    let firstDateDayOfWkIndex = new Date(this.yr, this.m, 1).getDay();
-    return firstDateDayOfWkIndex;
-  }
-  getLastDay() {
-    let lastDate = new Date(this.yr, this.m + 1, 0).getDate();
-    return lastDate;
-  }
-  getMonth() {
-    let monthIndex = new Date(this.yr, this.m, 1).getMonth();
-    return months[monthIndex];
-  }
-  calendar() {
+  //creates calendar markup based on current month/year
+  calendarMarkup() {
     let arr = [],
       firstWeekBlanks = [],
       LastWeekBlanks = [],
-      dates = [];
-    for (let i = 1; i <= this.getLastDay(); i++) {
+      dates = [],
+      lastDay = new Date(this.currYear, this.currMonth + 1, 0).getDate(),
+      firstDay = new Date(this.currYear, this.currMonth, 1).getDay();
+    for (let i = 1; i <= lastDay; i++) {
       arr.push(i);
     }
-    for (let i = 1; i <= this.getFirstDay(); i++) {
+    for (let i = 1; i <= firstDay; i++) {
       firstWeekBlanks.push("");
     }
     dates = firstWeekBlanks.concat(arr);
@@ -55,7 +47,7 @@ class Month {
 
     if (dates.length - 1 >= 35) {
       let allDates = dates.map((date) => `<td>${date}</td>`);
-      // need to add tr tags fore each row of calendar
+      // add tr tags fore each row of calendar
 
       allDates.splice(0, 0, `</tr>`);
       allDates.splice(8, 0, `</tr><tr>`);
@@ -67,7 +59,7 @@ class Month {
       return allDates.join("");
     }
     let allDates = dates.map((date) => `<td>${date}</td>`);
-    // need to add tr tags fore each row of calendar
+    // add tr tags fore each row of calendar
 
     allDates.splice(0, 0, `</tr>`);
     allDates.splice(8, 0, `</tr><tr>`);
@@ -77,119 +69,95 @@ class Month {
     allDates.splice(42, 0, `</tr>`);
     return allDates.join("");
   }
+}
 
-  static fullYear(year) {
-    let fullyear = [];
-    this.months.map((month, index) => {
-      month = new Month(year, index);
-      fullyear.push(month);
-    });
-    return fullyear;
+//load Calendar
+window.onload = function () {
+  //start Calendar
+  console.log("run function");
+  let c = new Calendar();
+  // render Calendar
+  let tbody = document.querySelector("tbody");
+  tbody.innerHTML = c.calendarMarkup();
+  // render Calendar header
+  let monthUI = document.getElementById("month"),
+    yearUI = document.getElementById("year");
+  monthUI.innerHTML = `${c.months[c.currMonth]}`;
+  yearUI.innerHTML = `${c.currYear}`;
+  //load any calendar events that are stored in local storage
+  let events = Store.getEvents();
+  if (events.month === c.currMonth) {
+    backgroundImage(events.url, events.year, events.month, events.day);
   }
-}
-// create array of calendar dates with html markups
-function displayMonth(year, month) {
-  const MonthsObj = Month.fullYear(year);
-  months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  let x = MonthsObj[months.indexOf(month)].getFirstDay(),
-    firstDay = document.querySelector(`tbody>tr>td:nth-child(${x + 1})`),
-    tbody = document.querySelector("tbody");
-  firstDay.innerHTML = MonthsObj[months.indexOf(month)].getMonth();
-  tbody.innerHTML = MonthsObj[months.indexOf(month)].calendar();
-}
-(function setMonth() {
-  // display month on UI of calendar
-  let monthIndex = new Date().getMonth(),
-    monthUI = document.getElementById("month"),
-    yearUI = document.getElementById("year"),
-    months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ],
-    current = months[monthIndex];
-  currentYear = 2020;
-
-  monthUI.innerHTML = `${current}`;
-  yearUI.innerHTML = `${currentYear}`;
-  displayMonth(2020, `${current}`);
-  // click event to control current
+  // Cycle calendar using left and right buttons
   let left = document.getElementById("left"),
     right = document.getElementById("right");
   left.addEventListener("click", () => {
-    updateLeft();
+    updateLeft(c);
   });
   right.addEventListener("click", () => {
-    updateRight();
+    updateRight(c);
   });
-  function updateLeft() {
-    if (monthIndex === 0) {
-      monthIndex = 11;
-      current = this.months[monthIndex];
-      currentYear--;
-      monthUI.innerHTML = `${current}`;
-      yearUI.innerHTML = `${currentYear}`;
-      displayMonth(`${currentYear}`, `${current}`);
-    } else monthIndex--;
-    current = this.months[monthIndex];
-    monthUI.innerHTML = `${current}`;
-    displayMonth(2020, `${current}`);
-  }
-  function updateRight() {
-    if (monthIndex === 11) {
-      monthIndex = 0;
-      current = this.months[monthIndex];
-      currentYear++;
-      monthUI.innerHTML = `${current}`;
-      yearUI.innerHTML = `${currentYear}`;
-      displayMonth(`${currentYear}`, `${current}`);
-    } else monthIndex++;
-    current = this.months[monthIndex];
-    monthUI.innerHTML = `${current}`;
-    displayMonth(`${currentYear}`, `${current}`);
-  }
-})();
+};
 
-class Store {
-  constructor(day, year, name, url) {
-    this.day = day;
-    this.year = year;
-    this.name = name;
-    this.url = url;
+function updateLeft(c) {
+  let monthUI = document.getElementById("month"),
+    yearUI = document.getElementById("year"),
+    tbody = document.querySelector("tbody");
+  if (c.currMonth === 0) {
+    c.currMonth = 11;
+    c.currYear--;
+    monthUI.innerHTML = `${c.months[c.currMonth]}`;
+    yearUI.innerHTML = `${c.currYear}`;
+    tbody.innerHTML = c.calendarMarkup();
+  } else {
+    c.currMonth--;
+    monthUI.innerHTML = `${c.months[c.currMonth]}`;
+    tbody.innerHTML = c.calendarMarkup();
+  }
+  let events = Store.getEvents();
+  if (events.month === c.currMonth) {
+    backgroundImage(events.url, events.year, events.month, events.day);
+  }
+}
+function updateRight(c) {
+  let monthUI = document.getElementById("month"),
+    yearUI = document.getElementById("year"),
+    tbody = document.querySelector("tbody");
+  if (c.currMonth === 11) {
+    c.currMonth = 0;
+    c.currYear++;
+    monthUI.innerHTML = `${c.months[c.currMonth]}`;
+    yearUI.innerHTML = `${c.currYear}`;
+    tbody.innerHTML = c.calendarMarkup();
+  } else current = c.currMonth++;
+  monthUI.innerHTML = `${c.months[c.currMonth]}`;
+  tbody.innerHTML = c.calendarMarkup();
+  let events = Store.getEvents();
+  if (events.month === c.currMonth) {
+    backgroundImage(events.url, events.year, events.month, events.day);
   }
 }
 
-// On submit event date and URL stored in local storage
-function storeEvents(date, url) {
-  let month = date[0] + date[1] - 1,
-    day = date[3] + date[4],
-    year = date.slice(6),
-    name = `${Month.months[month]} ${day}`;
-  let event = new Store(day, year, name, url);
-  localStorage.setItem(name, JSON.stringify(event));
-  console.log(MonthsObj[month]);
+// Storage of Events
+
+class Store {
+  constructor(date, url) {
+    let d = new Calendar();
+    this.month = date[0] + date[1] - 1;
+    this.day = Number(date[3] + date[4]);
+    this.year = Number(date.slice(6));
+    this.name = `${d.months[this.month]} ${this.day}`;
+    this.url = url;
+  }
+  // On submit event date and URL stored in local storage
+  storeEvents() {
+    localStorage.setItem("event", JSON.stringify(this));
+  }
+  static getEvents() {
+    let event = JSON.parse(localStorage.getItem("event"));
+    return event;
+  }
 }
 
 // Submit url and date for future calendar event calls storeEvents
@@ -199,20 +167,18 @@ let submit = document
     e.preventDefault();
     (eventDate = document.getElementById("eventDate")),
       (eventUrl = document.getElementById("eventUrl"));
-    storeEvents(eventDate.value, eventUrl.value);
+    let s = new Store(eventDate.value, eventUrl.value);
+    s.storeEvents();
+    let events = Store.getEvents();
+    backgroundImage(events.url, events.year, events.month, events.day);
   });
 
 //executes render of event=>  backgroundImage(eventUrl.value, eventDate.value);
 
-function backgroundImage(eventUrl, date) {
-  let month, year, day, calendarELements;
-  month = date[0] + date[1] - 1;
-  day = date[3] + date[4];
-  year = date.slice(6);
+function backgroundImage(eventUrl, year, month, day) {
   let d = new Date(year, month, 1),
     firstDay = d.getDay();
   calendarELements = firstDay + Number(day);
-  console.log(calendarELements);
   let item = document.querySelector(
     `tbody>tr:nth-child(${Math.ceil(calendarELements / 7)}) >td:nth-child(${
       calendarELements % 7 || 7

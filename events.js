@@ -71,10 +71,21 @@ class Calendar {
   }
 }
 
+//load any calendar events that are stored in local storage
+function loadEvents(month) {
+  let events = Store.getEvents();
+  if (events) {
+    events.forEach((event) => {
+      if (Number(event.date.slice(0, 2)) - 1 === month) {
+        backgroundImage(event.date, event.url);
+      }
+    });
+  }
+}
+
 //load Calendar
 window.onload = function () {
   //start Calendar
-  console.log("run function");
   let c = new Calendar();
   // render Calendar
   let tbody = document.querySelector("tbody");
@@ -85,10 +96,8 @@ window.onload = function () {
   monthUI.innerHTML = `${c.months[c.currMonth]}`;
   yearUI.innerHTML = `${c.currYear}`;
   //load any calendar events that are stored in local storage
-  let events = Store.getEvents();
-  if (events.month === c.currMonth) {
-    backgroundImage(events.url, events.year, events.month, events.day);
-  }
+  this.loadEvents(c.currMonth);
+
   // Cycle calendar using left and right buttons
   let left = document.getElementById("left"),
     right = document.getElementById("right");
@@ -115,10 +124,7 @@ function updateLeft(c) {
     monthUI.innerHTML = `${c.months[c.currMonth]}`;
     tbody.innerHTML = c.calendarMarkup();
   }
-  let events = Store.getEvents();
-  if (events.month === c.currMonth) {
-    backgroundImage(events.url, events.year, events.month, events.day);
-  }
+  loadEvents(c.currMonth);
 }
 function updateRight(c) {
   let monthUI = document.getElementById("month"),
@@ -130,65 +136,71 @@ function updateRight(c) {
     monthUI.innerHTML = `${c.months[c.currMonth]}`;
     yearUI.innerHTML = `${c.currYear}`;
     tbody.innerHTML = c.calendarMarkup();
-  } else current = c.currMonth++;
-  monthUI.innerHTML = `${c.months[c.currMonth]}`;
-  tbody.innerHTML = c.calendarMarkup();
-  let events = Store.getEvents();
-  if (events.month === c.currMonth) {
-    backgroundImage(events.url, events.year, events.month, events.day);
+  } else {
+    current = c.currMonth++;
+    monthUI.innerHTML = `${c.months[c.currMonth]}`;
+    tbody.innerHTML = c.calendarMarkup();
   }
+  loadEvents(c.currMonth);
 }
 
 // Storage of Events
 
 class Store {
   constructor(date, url) {
-    let d = new Calendar();
-    this.month = date[0] + date[1] - 1;
-    this.day = Number(date[3] + date[4]);
-    this.year = Number(date.slice(6));
-    this.name = `${d.months[this.month]} ${this.day}`;
+    this.date = date;
     this.url = url;
   }
   // On submit event date and URL stored in local storage
-  storeEvents() {
-    localStorage.setItem("event", JSON.stringify(this));
-  }
+  storeEvents = () => {
+    let events = Store.getEvents();
+    console.log(events);
+    events.push(this);
+    localStorage.setItem("events", JSON.stringify(events));
+  };
   static getEvents() {
-    let event = JSON.parse(localStorage.getItem("event"));
-    return event;
+    let events;
+    if (localStorage.getItem("events") === null) {
+      events = [];
+    } else {
+      events = JSON.parse(localStorage.getItem("events"));
+    }
+    return events;
   }
 }
-
-// Submit url and date for future calendar event calls storeEvents
-let submit = document
-  .getElementById("eventSubmit")
-  .addEventListener("click", (e) => {
-    e.preventDefault();
-    (eventDate = document.getElementById("eventDate")),
-      (eventUrl = document.getElementById("eventUrl"));
-    let s = new Store(eventDate.value, eventUrl.value);
-    s.storeEvents();
-    let events = Store.getEvents();
-    backgroundImage(events.url, events.year, events.month, events.day);
-  });
-
+// on Submit add event to storage
+(function addEvents() {
+  let submit = document
+    .getElementById("eventSubmit")
+    .addEventListener("click", (e) => {
+      (eventDate = document.getElementById("eventDate")),
+        (eventUrl = document.getElementById("eventUrl"));
+      let s = new Store(eventDate.value, eventUrl.value);
+      s.storeEvents();
+    });
+})();
 //executes render of event=>  backgroundImage(eventUrl.value, eventDate.value);
 
-function backgroundImage(eventUrl, year, month, day) {
+function backgroundImage(date, url) {
+  let c = new Calendar(),
+    month = Number(date[0]) + Number(date[1]) - 1,
+    day = Number(date[3] + date[4]),
+    year = Number(date.slice(6));
+
+  console.log(year, month, day);
   let d = new Date(year, month, 1),
-    firstDay = d.getDay();
-  calendarELements = firstDay + Number(day);
+    firstDay = d.getDay(),
+    calendarElements = firstDay + day;
   let item = document.querySelector(
-    `tbody>tr:nth-child(${Math.ceil(calendarELements / 7)}) >td:nth-child(${
-      calendarELements % 7 || 7
+    `tbody>tr:nth-child(${Math.ceil(calendarElements / 7)}) >td:nth-child(${
+      calendarElements % 7 || 7
     })`
   );
-  item.style = `background:url(${eventUrl}) no-repeat center center/cover`;
+  item.style = `background:url(${url}) no-repeat center center/cover`;
 }
 
 //psuedo code.==>>
-//1. Store year object in local storage set events property false by default.
-//2.If submit event for the month set the object in storage events property to true.
-//2. have the change month event listner have a if event:true execute
-//function to retrieve from local storage and function to display on DOM.
+//1. add display event to check year
+//2. fix style for calendar date with background applied.
+//3.clear form function
+//4. delete event function.

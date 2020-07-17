@@ -154,7 +154,6 @@ class Store {
   // On submit event date and URL stored in local storage
   storeEvents = () => {
     let events = Store.getEvents();
-    console.log(events);
     events.push(this);
     localStorage.setItem("events", JSON.stringify(events));
   };
@@ -187,7 +186,6 @@ function backgroundImage(date, url) {
     day = Number(date[3] + date[4]),
     year = Number(date.slice(6));
 
-  console.log(year, month, day);
   let d = new Date(year, month, 1),
     firstDay = d.getDay(),
     calendarElements = firstDay + day;

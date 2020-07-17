@@ -11,16 +11,19 @@ Month year and the dates as you select month with arrow key.
 form to add an events background image to the claendar date you input. I also added local storage methods 
 to store and retrieve created events.
 
+7/17/2020
+completed to do - -Make storage methods add an array of events that are displayed on the calendar if the current month is the same as the stored event month.
+
 
 TO Dos:
 
--Make storage methods add an array of events that are displayed on the calendar if the current month is the same as the stored event month.
+-clear submit form inputs on submit.
+
+-format calendar dates if background is applied for event to date.
 
 -Add a delete events functionallity
 
 -make calendar responsive
-
--clear submit form inputs on submit.
 
 -Add event TItle and subtext.
 

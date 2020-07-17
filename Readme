@@ -6,3 +6,27 @@ collapse.
 
 Added an events HTML, Css and JS. The JS I wrote creates a calendar on the web page that updates the 
 Month year and the dates as you select month with arrow key.
+
+7/16/2020 - I refactored the calendar code which had some redundencies. I also added a submit events 
+form to add an events background image to the claendar date you input. I also added local storage methods 
+to store and retrieve created events.
+
+
+TO Dos:
+
+-Make storage methods add an array of events that are displayed on the calendar if the current month is the same as the stored event month.
+
+-Add a delete events functionallity
+
+-make calendar responsive
+
+-clear submit form inputs on submit.
+
+-Add event TItle and subtext.
+
+-refactor code more.
+
+-optional but can add a hover effect to events to make it larger and easier to see?
+
+
+

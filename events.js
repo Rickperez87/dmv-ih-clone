@@ -176,6 +176,7 @@ class Store {
         (eventUrl = document.getElementById("eventUrl"));
       let s = new Store(eventDate.value, eventUrl.value);
       s.storeEvents();
+      window.location.reload();
     });
 })();
 //executes render of event=>  backgroundImage(eventUrl.value, eventDate.value);

@@ -13,11 +13,14 @@ to store and retrieve created events.
 
 7/17/2020
 completed to do - -Make storage methods add an array of events that are displayed on the calendar if the current month is the same as the stored event month.
+completed -clear submit form inputs on submit. The problem was on submit I couldn't pass the current month. The onload function creates current month and renders calendar.
+therefore when I submit an event it doesn't render. To solve this I added window.location.reload() method to trigger onload function.
+completed - Add year so I can add event in any year I want. Currently on current year supported.
+Correction - refactor. I moved the add events function into the window.onload function which creates the calendar object so I could pass the current month and year. 
+If the submitted calendar event matches current month year then the load events method is called and renders all events for the current calendar on the DOM.
 
 
 TO Dos:
-
--clear submit form inputs on submit.
 
 -format calendar dates if background is applied for event to date.
 
@@ -25,7 +28,7 @@ TO Dos:
 
 -make calendar responsive
 
--Add event TItle and subtext.
+-Add event Title and subtext.
 
 -refactor code more.
 

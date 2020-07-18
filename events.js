@@ -72,11 +72,14 @@ class Calendar {
 }
 
 //load any calendar events that are stored in local storage
-function loadEvents(month) {
+function loadEvents(month, year) {
   let events = Store.getEvents();
   if (events) {
     events.forEach((event) => {
-      if (Number(event.date.slice(0, 2)) - 1 === month) {
+      if (
+        Number(event.date.slice(0, 2)) - 1 === month &&
+        Number(event.date.slice(6)) === year
+      ) {
         backgroundImage(event.date, event.url);
       }
     });
@@ -96,7 +99,7 @@ window.onload = function () {
   monthUI.innerHTML = `${c.months[c.currMonth]}`;
   yearUI.innerHTML = `${c.currYear}`;
   //load any calendar events that are stored in local storage
-  this.loadEvents(c.currMonth);
+  this.loadEvents(c.currMonth, c.currYear);
 
   // Cycle calendar using left and right buttons
   let left = document.getElementById("left"),
@@ -107,6 +110,26 @@ window.onload = function () {
   right.addEventListener("click", () => {
     updateRight(c);
   });
+
+  // on Submit add event to storage reload page which renders stored event on calendar
+  (function addEvents() {
+    let submit = document
+      .getElementById("eventSubmit")
+      .addEventListener("click", (e) => {
+        (eventDate = document.getElementById("eventDate")),
+          (eventUrl = document.getElementById("eventUrl"));
+        let s = new Store(eventDate.value, eventUrl.value);
+        s.storeEvents();
+        if (
+          Number(s.date.slice(0, 2)) - 1 === c.currMonth &&
+          Number(s.date.slice(6)) === c.currYear
+        ) {
+          loadEvents(c.currMonth, c.currYear);
+        }
+        eventDate.value = "";
+        eventUrl.value = "";
+      });
+  })();
 };
 
 function updateLeft(c) {
@@ -124,7 +147,7 @@ function updateLeft(c) {
     monthUI.innerHTML = `${c.months[c.currMonth]}`;
     tbody.innerHTML = c.calendarMarkup();
   }
-  loadEvents(c.currMonth);
+  loadEvents(c.currMonth, c.currYear);
 }
 function updateRight(c) {
   let monthUI = document.getElementById("month"),
@@ -141,22 +164,23 @@ function updateRight(c) {
     monthUI.innerHTML = `${c.months[c.currMonth]}`;
     tbody.innerHTML = c.calendarMarkup();
   }
-  loadEvents(c.currMonth);
+  loadEvents(c.currMonth, c.currYear);
 }
 
-// Storage of Events
-
+// Storage class, creates objects to store submited calendar events
 class Store {
   constructor(date, url) {
     this.date = date;
     this.url = url;
   }
-  // On submit event date and URL stored in local storage
+  //method stores Event date and URL stored in local storage
   storeEvents = () => {
     let events = Store.getEvents();
     events.push(this);
     localStorage.setItem("events", JSON.stringify(events));
   };
+  // static method returns events stored in local storage
+
   static getEvents() {
     let events;
     if (localStorage.getItem("events") === null) {
@@ -167,25 +191,12 @@ class Store {
     return events;
   }
 }
-// on Submit add event to storage
-(function addEvents() {
-  let submit = document
-    .getElementById("eventSubmit")
-    .addEventListener("click", (e) => {
-      (eventDate = document.getElementById("eventDate")),
-        (eventUrl = document.getElementById("eventUrl"));
-      let s = new Store(eventDate.value, eventUrl.value);
-      s.storeEvents();
-      window.location.reload();
-    });
-})();
-//executes render of event=>  backgroundImage(eventUrl.value, eventDate.value);
 
+//sets background image from url argument on calendar date argument passed
 function backgroundImage(date, url) {
-  let c = new Calendar(),
-    month = Number(date[0]) + Number(date[1]) - 1,
-    day = Number(date[3] + date[4]),
-    year = Number(date.slice(6));
+  (month = Number(date[0]) + Number(date[1]) - 1),
+    (day = Number(date[3] + date[4])),
+    (year = Number(date.slice(6)));
 
   let d = new Date(year, month, 1),
     firstDay = d.getDay(),
@@ -199,7 +210,6 @@ function backgroundImage(date, url) {
 }
 
 //psuedo code.==>>
-//1. add display event to check year
 //2. fix style for calendar date with background applied.
-//3.clear form function
 //4. delete event function.
+//5. Bug, when on different month and submit a new event it reloads and renders current month.

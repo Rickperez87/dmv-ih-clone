@@ -145,7 +145,12 @@ window.onload = function () {
       date = e.target.nextSibling.innerHTML,
       filtered;
     filtered = events.filter(
-      (event) => event.date !== `0${c.currMonth + 1}/${date}/${c.currYear}`
+      (event) =>
+        event.date !==
+        //formatDateNums adds a 0 to single integer dates to compare to format of stored event date which has zeros
+        `${formatDateNums(c.currMonth + 1)}/${formatDateNums(date)}/${
+          c.currYear
+        }`
     );
     localStorage.setItem("events", JSON.stringify(filtered));
   }
@@ -214,10 +219,12 @@ function handleDelete(e) {
   }
 }
 
+//reformats single integer dates and adds 0 for comparing to localstorage date string format
+function formatDateNums(date) {
+  date = date.toString();
+  return date.length < 2 ? `0${date}` : `${date}`;
+}
+console.log(formatDateNums(1));
 //psuedo code.==>>
 
-//2. delete button bug.
-
-// implemented delete function but have a bug because i am trying to remove the event by
-// date but the json has two digits while the curr month is an umber so 01 =>1 and the strings
-// don't match. It may be easier to filter by some sort of other identifier.
+//

@@ -19,6 +19,9 @@ completed - Add year so I can add event in any year I want. Currently on current
 Correction - refactor. I moved the add events function into the window.onload function which creates the calendar object so I could pass the current month and year. 
 If the submitted calendar event matches current month year then the load events method is called and renders all events for the current calendar on the DOM.
 
+7/20/20 - refactor code by eliminating repitition, using terenary operators for some if else. 
+Rewrite of calendar markup. Use to be multiple loops and lots of slice to create markups but now it's one map function to create the mark up and creating a new row if day of the week
+is a sunday. Adding blank calendar days if it's before the day of the week of the 1st or the last day of the month.
 
 TO Dos:
 

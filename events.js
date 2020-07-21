@@ -21,53 +21,33 @@ class Calendar {
   }
   //creates calendar markup based on current month/year
   calendarMarkup() {
-    let arr = [],
-      firstWeekBlanks = [],
-      LastWeekBlanks = [],
-      dates = [],
-      lastDay = new Date(this.currYear, this.currMonth + 1, 0).getDate(),
-      firstDay = new Date(this.currYear, this.currMonth, 1).getDay();
-    for (let i = 1; i <= lastDay; i++) {
-      arr.push(i);
-    }
-    for (let i = 1; i <= firstDay; i++) {
-      firstWeekBlanks.push("");
-    }
-    dates = firstWeekBlanks.concat(arr);
-
-    // add blanks to last row to make full row
-    if (dates.length % 7 !== 0) {
-      let i = dates.length;
-      while (i % 7 !== 0) {
-        LastWeekBlanks.push("");
-        i++;
+    let lastDay = new Date(this.currYear, this.currMonth + 1, 0).getDate(),
+      firstDay = new Date(this.currYear, this.currMonth, 1).getDay(),
+      lastWeekBlanks =
+        6 - new Date(this.currYear, this.currMonth, lastDay).getDay();
+    //create array of html markup for current year and month;
+    let test = [...Array(firstDay + lastDay + lastWeekBlanks + 1).keys()].map(
+      (elem, i) => {
+        //add empty calendar square for first week before the 1st of the month
+        if (i <= firstDay || i >= firstDay + lastDay + 1) {
+          return (elem = `<td>${""}</td>`);
+        } else {
+          //if the day of the week is sunday prepend a new row
+          let dayOfTheWeek = new Date(
+            this.currYear,
+            this.currMonth,
+            i - firstDay
+          ).getDay();
+          elem =
+            dayOfTheWeek === 0
+              ? `</tr><tr><td>${i - firstDay}</td>`
+              : `<td>${i - firstDay}</td>`;
+          return elem;
+        }
       }
-      dates = dates.concat(LastWeekBlanks);
-    }
-
-    if (dates.length - 1 >= 35) {
-      let allDates = dates.map((date) => `<td>${date}</td>`);
-      // add tr tags fore each row of calendar
-
-      allDates.splice(0, 0, `</tr>`);
-      allDates.splice(8, 0, `</tr><tr>`);
-      allDates.splice(16, 0, `</tr><tr>`);
-      allDates.splice(24, 0, `</tr><tr>`);
-      allDates.splice(32, 0, `</tr><tr>`);
-      allDates.splice(40, 0, `</tr><tr>`);
-      allDates.splice(48, 0, `</tr>`);
-      return allDates.join("");
-    }
-    let allDates = dates.map((date) => `<td>${date}</td>`);
-    // add tr tags fore each row of calendar
-
-    allDates.splice(0, 0, `</tr>`);
-    allDates.splice(8, 0, `</tr><tr>`);
-    allDates.splice(16, 0, `</tr><tr>`);
-    allDates.splice(24, 0, `</tr><tr>`);
-    allDates.splice(32, 0, `</tr><tr>`);
-    allDates.splice(42, 0, `</tr>`);
-    return allDates.join("");
+    );
+    test.shift();
+    return test.join("");
   }
 }
 
@@ -130,42 +110,33 @@ window.onload = function () {
         eventUrl.value = "";
       });
   })();
-};
 
-function updateLeft(c) {
-  let monthUI = document.getElementById("month"),
-    yearUI = document.getElementById("year"),
-    tbody = document.querySelector("tbody");
-  if (c.currMonth === 0) {
-    c.currMonth = 11;
-    c.currYear--;
+  function updateLeft(c) {
+    if (c.currMonth === 0) {
+      c.currMonth = 11;
+      c.currYear--;
+    } else {
+      c.currMonth--;
+    }
+    displayCalendar();
+    loadEvents(c.currMonth, c.currYear);
+  }
+  function updateRight(c) {
+    if (c.currMonth === 11) {
+      c.currMonth = 0;
+      c.currYear++;
+    } else {
+      current = c.currMonth++;
+    }
+    displayCalendar();
+    loadEvents(c.currMonth, c.currYear);
+  }
+  function displayCalendar() {
     monthUI.innerHTML = `${c.months[c.currMonth]}`;
     yearUI.innerHTML = `${c.currYear}`;
     tbody.innerHTML = c.calendarMarkup();
-  } else {
-    c.currMonth--;
-    monthUI.innerHTML = `${c.months[c.currMonth]}`;
-    tbody.innerHTML = c.calendarMarkup();
   }
-  loadEvents(c.currMonth, c.currYear);
-}
-function updateRight(c) {
-  let monthUI = document.getElementById("month"),
-    yearUI = document.getElementById("year"),
-    tbody = document.querySelector("tbody");
-  if (c.currMonth === 11) {
-    c.currMonth = 0;
-    c.currYear++;
-    monthUI.innerHTML = `${c.months[c.currMonth]}`;
-    yearUI.innerHTML = `${c.currYear}`;
-    tbody.innerHTML = c.calendarMarkup();
-  } else {
-    current = c.currMonth++;
-    monthUI.innerHTML = `${c.months[c.currMonth]}`;
-    tbody.innerHTML = c.calendarMarkup();
-  }
-  loadEvents(c.currMonth, c.currYear);
-}
+};
 
 // Storage class, creates objects to store submited calendar events
 class Store {
@@ -182,12 +153,11 @@ class Store {
   // static method returns events stored in local storage
 
   static getEvents() {
-    let events;
-    if (localStorage.getItem("events") === null) {
-      events = [];
-    } else {
-      events = JSON.parse(localStorage.getItem("events"));
-    }
+    let events =
+      localStorage.getItem("events") === null
+        ? []
+        : JSON.parse(localStorage.getItem("events"));
+
     return events;
   }
 }
@@ -210,6 +180,5 @@ function backgroundImage(date, url) {
 }
 
 //psuedo code.==>>
-//2. fix style for calendar date with background applied.
-//4. delete event function.
-//5. Bug, when on different month and submit a new event it reloads and renders current month.
+//1. fix style for calendar date with background applied.
+//2. delete event function.

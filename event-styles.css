@@ -12,6 +12,10 @@ body {
 h1 {
   font-weight: 400;
 }
+span {
+  display: inline-block;
+  padding: 4px;
+}
 .container,
 .addEvent-wrap {
   padding: 5rem 10rem;
@@ -89,6 +93,12 @@ tbody > tr > td {
 .eventDate {
   background: #fafafa;
   color: #333;
-  display: inline-block;
-  padding: 4px;
+}
+.deleteBtn {
+  font-size: 12px;
+  padding: 2px;
+  background: red;
+  color: white;
+  float: left;
+  cursor: pointer;
 }

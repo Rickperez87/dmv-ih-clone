@@ -105,6 +105,11 @@ window.onload = function () {
         eventDate.value = "";
         eventUrl.value = "";
       });
+    //delete btn event
+    tbody.addEventListener("click", (e) => {
+      removeEvent(e);
+      handleDelete(e);
+    });
   })();
 
   //Update the current month, back one month
@@ -134,6 +139,15 @@ window.onload = function () {
     monthUI.innerHTML = `${c.months[c.currMonth]}`;
     yearUI.innerHTML = `${c.currYear}`;
     tbody.innerHTML = c.calendarMarkup();
+  }
+  function removeEvent(e) {
+    let events = Store.getEvents(),
+      date = e.target.nextSibling.innerHTML,
+      filtered;
+    filtered = events.filter(
+      (event) => event.date !== `0${c.currMonth + 1}/${date}/${c.currYear}`
+    );
+    localStorage.setItem("events", JSON.stringify(filtered));
   }
 };
 
@@ -180,8 +194,30 @@ function backgroundImage(date, url) {
   // Add class for background behind date to make it visible with image background if applicable
   let eventDate = item.innerHTML;
   item.innerHTML = `<span class='eventDate'>${eventDate}</span>`;
+  item.prepend(renderDelete());
+}
+
+// create delete button UI
+let renderDelete = () => {
+  let deleteBtn = document.createElement("span");
+  deleteBtn.className = "deleteBtn";
+  deleteBtn.innerHTML = "X";
+  return deleteBtn;
+};
+// handle delete event
+function handleDelete(e) {
+  let td = e.target.parentElement,
+    date = e.target.nextSibling.innerHTML;
+  if (e.target.className === "deleteBtn") {
+    td.innerHTML = date;
+    td.style = "";
+  }
 }
 
 //psuedo code.==>>
 
-//2. delete event function.
+//2. delete button bug.
+
+// implemented delete function but have a bug because i am trying to remove the event by
+// date but the json has two digits while the curr month is an umber so 01 =>1 and the strings
+// don't match. It may be easier to filter by some sort of other identifier.

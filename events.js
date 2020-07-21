@@ -17,37 +17,35 @@ class Calendar {
     let d = new Date();
     this.currYear = d.getFullYear();
     this.currMonth = d.getMonth();
-    this.currDay = d.getDate();
   }
   //creates calendar markup based on current month/year
   calendarMarkup() {
-    let lastDay = new Date(this.currYear, this.currMonth + 1, 0).getDate(),
-      firstDay = new Date(this.currYear, this.currMonth, 1).getDay(),
-      lastWeekBlanks =
-        6 - new Date(this.currYear, this.currMonth, lastDay).getDay();
+    let cY = this.currYear,
+      cM = this.currMonth;
+    let lastDay = new Date(cY, cM + 1, 0).getDate(),
+      firstDay = new Date(cY, cM, 1).getDay(),
+      lastWeekBlanks = 6 - new Date(cY, cM, lastDay).getDay();
+
     //create array of html markup for current year and month;
-    let test = [...Array(firstDay + lastDay + lastWeekBlanks + 1).keys()].map(
-      (elem, i) => {
-        //add empty calendar square for first week before the 1st of the month
-        if (i <= firstDay || i >= firstDay + lastDay + 1) {
-          return (elem = `<td>${""}</td>`);
-        } else {
-          //if the day of the week is sunday prepend a new row
-          let dayOfTheWeek = new Date(
-            this.currYear,
-            this.currMonth,
-            i - firstDay
-          ).getDay();
-          elem =
-            dayOfTheWeek === 0
-              ? `</tr><tr><td>${i - firstDay}</td>`
-              : `<td>${i - firstDay}</td>`;
-          return elem;
-        }
+    let calHtml = [
+      ...Array(firstDay + lastDay + lastWeekBlanks + 1).keys(),
+    ].map((elem, i) => {
+      let dayOfTheWeek = new Date(cY, cM, i - firstDay).getDay();
+
+      //add empty calendar square for first and last week of the month
+      if (i <= firstDay || i >= firstDay + lastDay + 1) {
+        return (elem = `<td>${""}</td>`);
+      } else {
+        //if the day of the week is sunday prepend a new row
+        elem =
+          dayOfTheWeek === 0
+            ? `</tr><tr><td>${i - firstDay}</td>`
+            : `<td>${i - firstDay}</td>`;
+        return elem;
       }
-    );
-    test.shift();
-    return test.join("");
+    });
+    calHtml.shift();
+    return calHtml.join("");
   }
 }
 
@@ -68,20 +66,18 @@ function loadEvents(month, year) {
 
 //load Calendar
 window.onload = function () {
+  let tbody = document.querySelector("tbody"),
+    monthUI = document.getElementById("month"),
+    yearUI = document.getElementById("year");
+
   //start Calendar
   let c = new Calendar();
-  // render Calendar
-  let tbody = document.querySelector("tbody");
-  tbody.innerHTML = c.calendarMarkup();
-  // render Calendar header
-  let monthUI = document.getElementById("month"),
-    yearUI = document.getElementById("year");
-  monthUI.innerHTML = `${c.months[c.currMonth]}`;
-  yearUI.innerHTML = `${c.currYear}`;
+  displayCalendar();
+
   //load any calendar events that are stored in local storage
   this.loadEvents(c.currMonth, c.currYear);
 
-  // Cycle calendar using left and right buttons
+  // left & right arrows event
   let left = document.getElementById("left"),
     right = document.getElementById("right");
   left.addEventListener("click", () => {
@@ -111,6 +107,7 @@ window.onload = function () {
       });
   })();
 
+  //Update the current month, back one month
   function updateLeft(c) {
     if (c.currMonth === 0) {
       c.currMonth = 11;
@@ -121,6 +118,8 @@ window.onload = function () {
     displayCalendar();
     loadEvents(c.currMonth, c.currYear);
   }
+
+  //Update the current month, forward one month
   function updateRight(c) {
     if (c.currMonth === 11) {
       c.currMonth = 0;
@@ -144,14 +143,15 @@ class Store {
     this.date = date;
     this.url = url;
   }
-  //method stores Event date and URL stored in local storage
+
+  // set event date and URL of background image in local storage
   storeEvents = () => {
     let events = Store.getEvents();
     events.push(this);
     localStorage.setItem("events", JSON.stringify(events));
   };
-  // static method returns events stored in local storage
 
+  // get events stored in local storage
   static getEvents() {
     let events =
       localStorage.getItem("events") === null
@@ -162,7 +162,7 @@ class Store {
   }
 }
 
-//sets background image from url argument on calendar date argument passed
+//display background image on calendar date passed
 function backgroundImage(date, url) {
   (month = Number(date[0]) + Number(date[1]) - 1),
     (day = Number(date[3] + date[4])),
@@ -177,8 +177,11 @@ function backgroundImage(date, url) {
     })`
   );
   item.style = `background:url(${url}) no-repeat center center/cover`;
+  // Add class for background behind date to make it visible with image background if applicable
+  let eventDate = item.innerHTML;
+  item.innerHTML = `<span class='eventDate'>${eventDate}</span>`;
 }
 
 //psuedo code.==>>
-//1. fix style for calendar date with background applied.
+
 //2. delete event function.

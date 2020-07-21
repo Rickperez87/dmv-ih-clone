@@ -23,19 +23,22 @@ If the submitted calendar event matches current month year then the load events 
 Rewrite of calendar markup. Use to be multiple loops and lots of slice to create markups but now it's one map function to create the mark up and creating a new row if day of the week
 is a sunday. Adding blank calendar days if it's before the day of the week of the 1st or the last day of the month.
 
-TO Dos:
-
+7/21/2020 - 
 -format calendar dates if background is applied for event to date.
 
 -Add a delete events functionallity
 
--make calendar responsive
+TO Dos:
 
--Add event Title and subtext.
+- Make calendar responsive
+- add validation to event inputs
+- Style calendar UI
 
 -refactor code more.
 
--optional but can add a hover effect to events to make it larger and easier to see?
+-optional hover events displays event details
+
+Future: when working with database make event creation only accessible for authenticated users
 
 
 

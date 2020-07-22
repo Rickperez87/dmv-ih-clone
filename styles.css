@@ -231,7 +231,7 @@ li {
 }
 /* video player */
 .container {
-  padding: 100px 40px;
+  padding: 0px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;

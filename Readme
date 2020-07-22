@@ -28,9 +28,12 @@ is a sunday. Adding blank calendar days if it's before the day of the week of th
 
 -Add a delete events functionallity
 
+7/22/2020 - 
+added video with HTML 5 api
+
 TO Dos:
 
-- Make calendar responsive
+- photo overlay the video and on hover auto play no sound. 
 - add validation to event inputs
 - Style calendar UI
 

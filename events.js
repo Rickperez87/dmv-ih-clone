@@ -19,7 +19,7 @@ class Calendar {
     this.currMonth = d.getMonth();
   }
   //creates calendar markup based on current month/year
-  calendarMarkup() {
+  createCalendarMarkup() {
     let cY = this.currYear,
       cM = this.currMonth;
     let lastDay = new Date(cY, cM + 1, 0).getDate(),
@@ -50,7 +50,7 @@ class Calendar {
 }
 
 //load any calendar events that are stored in local storage
-function loadEvents(month, year) {
+function showEvents(month, year) {
   let events = Store.getEvents();
   if (events) {
     events.forEach((event) => {
@@ -58,7 +58,7 @@ function loadEvents(month, year) {
         Number(event.date.slice(0, 2)) - 1 === month &&
         Number(event.date.slice(6)) === year
       ) {
-        backgroundImage(event.date, event.url);
+        setEventBackground(event.date, event.url);
       }
     });
   }
@@ -72,10 +72,10 @@ window.onload = function () {
 
   //start Calendar
   let c = new Calendar();
-  displayCalendar();
+  showCalendar();
 
   //load any calendar events that are stored in local storage
-  this.loadEvents(c.currMonth, c.currYear);
+  this.showEvents(c.currMonth, c.currYear);
 
   // left & right arrows event
   let left = document.getElementById("left"),
@@ -100,15 +100,15 @@ window.onload = function () {
           Number(s.date.slice(0, 2)) - 1 === c.currMonth &&
           Number(s.date.slice(6)) === c.currYear
         ) {
-          loadEvents(c.currMonth, c.currYear);
+          showEvents(c.currMonth, c.currYear);
         }
         eventDate.value = "";
         eventUrl.value = "";
       });
     //delete btn event
     tbody.addEventListener("click", (e) => {
-      removeEvent(e);
-      handleDelete(e);
+      deleteEventFromStore(e);
+      deleteEvent(e);
     });
   })();
 
@@ -120,8 +120,8 @@ window.onload = function () {
     } else {
       c.currMonth--;
     }
-    displayCalendar();
-    loadEvents(c.currMonth, c.currYear);
+    showCalendar();
+    showEvents(c.currMonth, c.currYear);
   }
 
   //Update the current month, forward one month
@@ -132,15 +132,15 @@ window.onload = function () {
     } else {
       current = c.currMonth++;
     }
-    displayCalendar();
-    loadEvents(c.currMonth, c.currYear);
+    showCalendar();
+    showEvents(c.currMonth, c.currYear);
   }
-  function displayCalendar() {
+  function showCalendar() {
     monthUI.innerHTML = `${c.months[c.currMonth]}`;
     yearUI.innerHTML = `${c.currYear}`;
-    tbody.innerHTML = c.calendarMarkup();
+    tbody.innerHTML = c.createCalendarMarkup();
   }
-  function removeEvent(e) {
+  function deleteEventFromStore(e) {
     let events = Store.getEvents(),
       date = e.target.nextSibling.innerHTML,
       filtered;
@@ -182,7 +182,7 @@ class Store {
 }
 
 //display background image on calendar date passed
-function backgroundImage(date, url) {
+function setEventBackground(date, url) {
   (month = Number(date[0]) + Number(date[1]) - 1),
     (day = Number(date[3] + date[4])),
     (year = Number(date.slice(6)));
@@ -199,18 +199,18 @@ function backgroundImage(date, url) {
   // Add class for background behind date to make it visible with image background if applicable
   let eventDate = item.innerHTML;
   item.innerHTML = `<span class='eventDate'>${eventDate}</span>`;
-  item.prepend(renderDelete());
+  item.prepend(createDeleteBtn());
 }
 
 // create delete button UI
-let renderDelete = () => {
+let createDeleteBtn = () => {
   let deleteBtn = document.createElement("span");
   deleteBtn.className = "deleteBtn";
   deleteBtn.innerHTML = "X";
   return deleteBtn;
 };
 // handle delete event
-function handleDelete(e) {
+function deleteEvent(e) {
   let td = e.target.parentElement,
     date = e.target.nextSibling.innerHTML;
   if (e.target.className === "deleteBtn") {
